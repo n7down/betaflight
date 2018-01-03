@@ -72,80 +72,103 @@
 #define CALCULATE_LED_XY(x, y) ((((x) & LED_XY_MASK) << LED_X_BIT_OFFSET) | (((y) & LED_XY_MASK) << LED_Y_BIT_OFFSET))
 
 typedef enum {
-    LED_MODE_ORIENTATION = 0,
-    LED_MODE_HEADFREE,
-    LED_MODE_HORIZON,
-    LED_MODE_ANGLE,
-    LED_MODE_MAG,
-    LED_MODE_BARO,
-    LED_SPECIAL,
-    LED_AUX_CHANNEL
+	LED_MODE_ORIENTATION = 0,
+	LED_MODE_HEADFREE,
+	LED_MODE_HORIZON,
+	LED_MODE_ANGLE,
+	LED_MODE_MAG,
+	LED_MODE_BARO,
+	LED_SPECIAL,
+	LED_AUX_CHANNEL
 } ledModeIndex_e;
 
 typedef enum {
-    LED_SCOLOR_DISARMED = 0,
-    LED_SCOLOR_ARMED,
-    LED_SCOLOR_ANIMATION,
-    LED_SCOLOR_BACKGROUND,
-    LED_SCOLOR_BLINKBACKGROUND,
-    LED_SCOLOR_GPSNOSATS,
-    LED_SCOLOR_GPSNOLOCK,
-    LED_SCOLOR_GPSLOCKED
+	LED_SCOLOR_DISARMED = 0,
+	LED_SCOLOR_ARMED,
+	LED_SCOLOR_ANIMATION,
+	LED_SCOLOR_BACKGROUND,
+	LED_SCOLOR_BLINKBACKGROUND,
+	LED_SCOLOR_GPSNOSATS,
+	LED_SCOLOR_GPSNOLOCK,
+	LED_SCOLOR_GPSLOCKED
 } ledSpecialColorIds_e;
 
 typedef enum {
-    LED_DIRECTION_NORTH = 0,
-    LED_DIRECTION_EAST,
-    LED_DIRECTION_SOUTH,
-    LED_DIRECTION_WEST,
-    LED_DIRECTION_UP,
-    LED_DIRECTION_DOWN
+	LED_DIRECTION_NORTH = 0,
+	LED_DIRECTION_EAST,
+	LED_DIRECTION_SOUTH,
+	LED_DIRECTION_WEST,
+	LED_DIRECTION_UP,
+	LED_DIRECTION_DOWN
 } ledDirectionId_e;
 
 typedef enum {
-    LED_FUNCTION_COLOR,
-    LED_FUNCTION_FLIGHT_MODE,
-    LED_FUNCTION_ARM_STATE,
-    LED_FUNCTION_BATTERY,
-    LED_FUNCTION_RSSI,
-    LED_FUNCTION_GPS,
-    LED_FUNCTION_THRUST_RING
+	LED_FUNCTION_COLOR,
+	LED_FUNCTION_FLIGHT_MODE,
+	LED_FUNCTION_ARM_STATE,
+	LED_FUNCTION_BATTERY,
+	LED_FUNCTION_RSSI,
+	LED_FUNCTION_GPS,
+	LED_FUNCTION_THRUST_RING
 } ledBaseFunctionId_e;
 
 typedef enum {
-    LED_OVERLAY_THROTTLE,
-    LED_OVERLAY_LARSON_SCANNER,
-    LED_OVERLAY_BLINK,
-    LED_OVERLAY_VTX,
-    LED_OVERLAY_INDICATOR,
-    LED_OVERLAY_WARNING
+	LED_OVERLAY_THROTTLE,
+	LED_OVERLAY_LARSON_SCANNER,
+	LED_OVERLAY_BLINK,
+	LED_OVERLAY_VTX,
+	LED_OVERLAY_INDICATOR,
+	LED_OVERLAY_WARNING
 } ledOverlayId_e;
 
 typedef struct modeColorIndexes_s {
-    uint8_t color[LED_DIRECTION_COUNT];
+	uint8_t color[LED_DIRECTION_COUNT];
 } modeColorIndexes_t;
 
 typedef struct specialColorIndexes_s {
-    uint8_t color[LED_SPECIAL_COLOR_COUNT];
+	uint8_t color[LED_SPECIAL_COLOR_COUNT];
 } specialColorIndexes_t;
 
 typedef uint32_t ledConfig_t;
 
 typedef struct ledCounts_s {
-    uint8_t count;
-    uint8_t ring;
-    uint8_t larson;
-    uint8_t ringSeqLen;
+	uint8_t count;
+	uint8_t ring;
+	uint8_t larson;
+	uint8_t ringSeqLen;
 } ledCounts_t;
 
+typedef enum {
+	DEFAULT,
+	BLACK,
+	WHITE,
+	RED,
+	ORANGE,
+	YELLOW,
+	LIME_GREEN,
+	GREEN,
+	MINT_GREEN,
+	CYAN,
+	LIGHT_BLUE,
+	BLUE,
+	DARK_VIOLET,
+	MAGENTA,
+	DEEP_PINK
+} ledProfile_e;
+
 typedef struct ledStripConfig_s {
-    ledConfig_t ledConfigs[LED_MAX_STRIP_LENGTH];
-    hsvColor_t colors[LED_CONFIGURABLE_COLOR_COUNT];
-    modeColorIndexes_t modeColors[LED_MODE_COUNT];
-    specialColorIndexes_t specialColors;
-    uint8_t ledstrip_visual_beeper; // suppress LEDLOW mode if beeper is on
-    uint8_t ledstrip_aux_channel;
-    ioTag_t ioTag;
+	ledConfig_t ledConfigs[LED_MAX_STRIP_LENGTH];
+	hsvColor_t colors[LED_CONFIGURABLE_COLOR_COUNT];
+
+	// for led profiles
+	hsvColor_t backupColors[LED_CONFIGURABLE_COLOR_COUNT];
+	ledProfile_e activeProfile;
+
+	modeColorIndexes_t modeColors[LED_MODE_COUNT];
+	specialColorIndexes_t specialColors;
+	uint8_t ledstrip_visual_beeper; // suppress LEDLOW mode if beeper is on
+	uint8_t ledstrip_aux_channel;
+	ioTag_t ioTag;
 } ledStripConfig_t;
 
 PG_DECLARE(ledStripConfig_t, ledStripConfig);
@@ -187,3 +210,5 @@ void applyDefaultLedStripConfig(ledConfig_t *ledConfig);
 void applyDefaultColors(hsvColor_t *colors);
 void applyDefaultModeColors(modeColorIndexes_t *modeColors);
 void applyDefaultSpecialColors(specialColorIndexes_t *specialColors);
+
+void setProfile(ledProfile_e p);
