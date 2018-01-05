@@ -36,11 +36,22 @@
 
 #include "fc/config.h"
 
+#include "io/ledstrip.h"
 
 #ifdef USE_LED_STRIP
 
+static uint8_t ledProfile;
+
 static bool featureRead = false;
 static uint8_t cmsx_FeatureLedstrip;
+
+static long applyLedProfile(displayPort_t *pDisp, const void *self)
+{
+	UNUSED(pDisp);
+	UNUSED(self);
+
+	// TODO: finish this
+}
 
 static long cmsx_Ledstrip_FeatureRead(void)
 {
@@ -65,11 +76,19 @@ static long cmsx_Ledstrip_FeatureWriteback(const OSD_Entry *self)
     return 0;
 }
 
+static const char * const LED_PROFILE_NAMES[] = {
+	DEFAULT,
+	WHITE,
+	RED
+};
+
+static OSD_TAB_t entryLed = {&ledProfile, 4, LED_PROFILE_NAMES};
+
 static OSD_Entry cmsx_menuLedstripEntries[] =
 {
     { "-- LED STRIP --", OME_Label, NULL, NULL, 0 },
     { "ENABLED",         OME_Bool,  NULL, &cmsx_FeatureLedstrip, 0 },
-
+	{ "LED PROFILE", 	 OME_TAB,	applyLedProfile, &entryLed, 0 },
     { "BACK", OME_Back, NULL, NULL, 0 },
     { NULL, OME_END, NULL, NULL, 0 }
 };

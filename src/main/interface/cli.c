@@ -1296,7 +1296,7 @@ static void ledProfile(char *cmdline)
 		switch(i) {
 			case 0:
 				// FIXME: this is giving a link error
-				setProfile(DEFAULT);
+				// setProfile(DEFAULT);
 				break;
 			case 1:
 				// setProfile(WHITE);
