@@ -140,9 +140,9 @@ typedef struct ledCounts_s {
 
 typedef enum {
 	DEFAULT,
-	BLACK,
 	WHITE,
 	RED,
+	BLACK,
 	ORANGE,
 	YELLOW,
 	LIME_GREEN,

@@ -50,7 +50,21 @@ static long applyLedProfile(displayPort_t *pDisp, const void *self)
 	UNUSED(pDisp);
 	UNUSED(self);
 
-	// TODO: finish this
+	switch(ledProfile) {
+		case 0: 
+			setProfile(DEFAULT);
+			break;
+		case 1: 
+			setProfile(WHITE);
+			break;
+		case 2:
+			setProfile(RED);
+			break;
+		default:
+			setProfile(DEFAULT);
+			break;
+	}
+	return 0;
 }
 
 static long cmsx_Ledstrip_FeatureRead(void)
@@ -59,7 +73,6 @@ static long cmsx_Ledstrip_FeatureRead(void)
         cmsx_FeatureLedstrip = feature(FEATURE_LED_STRIP) ? 1 : 0;
         featureRead = true;
     }
-
     return 0;
 }
 
@@ -77,12 +90,12 @@ static long cmsx_Ledstrip_FeatureWriteback(const OSD_Entry *self)
 }
 
 static const char * const LED_PROFILE_NAMES[] = {
-	DEFAULT,
-	WHITE,
-	RED
+	"DEFAULT ",
+	"WHITE   ",
+	"RED     "
 };
 
-static OSD_TAB_t entryLed = {&ledProfile, 4, LED_PROFILE_NAMES};
+static OSD_TAB_t entryLed = {&ledProfile, 2, LED_PROFILE_NAMES};
 
 static OSD_Entry cmsx_menuLedstripEntries[] =
 {
