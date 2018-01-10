@@ -265,5 +265,7 @@ void generateLedConfig(ledConfig_t *, char *, size_t) {}
 bool isSerialTransmitBufferEmpty(const serialPort_t *) {return true; }
 void serialWrite(serialPort_t *, uint8_t ch) { printf("%c", ch);}
 
+void setProfile(ledProfile_e) {}
+
 
 }

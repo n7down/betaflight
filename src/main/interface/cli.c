@@ -1295,14 +1295,13 @@ static void ledProfile(char *cmdline)
 		int i = atoi(ptr);
 		switch(i) {
 			case 0:
-				// FIXME: this is giving a link error
-				// setProfile(DEFAULT);
+				setProfile(DEFAULT);
 				break;
 			case 1:
-				// setProfile(WHITE);
+				setProfile(WHITE);
 				break;
 			case 2:
-				// setProfile(RED);
+				setProfile(RED);
 				break;
 			default:
 				cliShowArgumentRangeError("index", 0, 2);

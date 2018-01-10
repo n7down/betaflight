@@ -86,7 +86,7 @@ cli_unittest_SRC := \
 		$(USER_DIR)/interface/cli.c \
 		$(USER_DIR)/config/feature.c \
 		$(USER_DIR)/pg/pg.c \
-                $(USER_DIR)/common/typeconversion.c
+       	$(USER_DIR)/common/typeconversion.c 
 
 cli_unittest_DEFINES := \
 		USE_OSD \
