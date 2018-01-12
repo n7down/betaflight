@@ -1187,39 +1187,31 @@ static void ledStripDisable(void)
 
 void setProfile(ledProfile_e p)
 {
-	// set led colors to backupColors
-	if(ledStripConfigMutable()->activeProfile == DEFAULT)
-	{
-		memcpy(ledStripConfig()->backupColors, ledStripConfig()->colors, LED_CONFIGURABLE_COLOR_COUNT * sizeof(ledStripConfig()->colors[0]));
-	}
 	const char *newColor;
 	switch(p) {
 		// profile 1
 		case WHITE:
 			newColor = "1, 1, 1";
-			ledStripConfig()->activeProfile = WHITE;
+			ledStripConfigMutable()->activeProfile = WHITE;
 			break;
-			// profile 2
+		
+		// profile 2
 		case RED:
 			newColor = "0, 0, 255";
-			ledStripConfig()->activeProfile = RED;
+			ledStripConfigMutable()->activeProfile = RED;
 			break;
 
-			// profile 0
+		// profile 0
 		case DEFAULT:
 		default:
-			memcpy(ledStripConfig()->colors, ledStripConfigMutable()->backupColors, LED_CONFIGURABLE_COLOR_COUNT * sizeof(ledStripConfig()->colors[1]));
-			ledStripConfig()->activeProfile = DEFAULT;
-			// TODO: delete the backup ledStripConfigMutable()->backupColors
+			newColor = "0, 0, 0";
+			ledStripConfigMutable()->activeProfile = WHITE;
 			break;
 	}
-	// for (uint8_t index = 0; index < WS2811_LED_STRIP_LENGTH; index++) {
-	//	parseColor(index, newColor);
-	// }
     for(uint8_t index = 0; index < WS2811_LED_STRIP_LENGTH; index++) {
 		const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[index];
 		if (ledGetFunction(ledConfig) == LED_FUNCTION_COLOR) {
-			*ledConfig = DEFINE_LED(ledGetX(ledConfig), ledGetY(ledConfig), newColor, ledGetDirection(ledConfig), ledGetFunction(ledConfig), ledGetOverlay(ledConfig), 0);
+			parseColor(index, newColor);
 		}
 	}
 	ledStripUpdate(micros());

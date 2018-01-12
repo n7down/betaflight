@@ -161,7 +161,6 @@ typedef struct ledStripConfig_s {
 	hsvColor_t colors[LED_CONFIGURABLE_COLOR_COUNT];
 
 	// for led profiles
-	hsvColor_t backupColors[LED_CONFIGURABLE_COLOR_COUNT];
 	ledProfile_e activeProfile;
 
 	modeColorIndexes_t modeColors[LED_MODE_COUNT];

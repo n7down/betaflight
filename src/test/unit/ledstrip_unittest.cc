@@ -364,9 +364,12 @@ TEST(LedStripTest, ledProfiles)
 #ifdef DEBUG_LEDSTRIP
 		printf("iteration: %d\n", index);
 #endif
-		EXPECT_EQ(expectedColor.h, ledStripConfig()->colors[index].h);
-		EXPECT_EQ(expectedColor.s, ledStripConfig()->colors[index].s);
-		EXPECT_EQ(expectedColor.v, ledStripConfig()->colors[index].v);
+		const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[index];
+		if (ledGetFunction(ledConfig) == LED_FUNCTION_COLOR) {
+			EXPECT_EQ(expectedColor.h, ledStripConfig()->colors[index].h);
+			EXPECT_EQ(expectedColor.s, ledStripConfig()->colors[index].s);
+			EXPECT_EQ(expectedColor.v, ledStripConfig()->colors[index].v);
+		}
 	}
 
 	expectedColor = {
@@ -382,9 +385,12 @@ TEST(LedStripTest, ledProfiles)
 #ifdef DEBUG_LEDSTRIP
 		printf("iteration: %d\n", index);
 #endif
-		EXPECT_EQ(expectedColor.h, ledStripConfig()->colors[index].h);
-		EXPECT_EQ(expectedColor.s, ledStripConfig()->colors[index].s);
-		EXPECT_EQ(expectedColor.v, ledStripConfig()->colors[index].v);
+		const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[index];
+		if (ledGetFunction(ledConfig) == LED_FUNCTION_COLOR) {
+			EXPECT_EQ(expectedColor.h, ledStripConfig()->colors[index].h);
+			EXPECT_EQ(expectedColor.s, ledStripConfig()->colors[index].s);
+			EXPECT_EQ(expectedColor.v, ledStripConfig()->colors[index].v);
+		}
 	}
 }
 
