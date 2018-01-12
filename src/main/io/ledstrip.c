@@ -41,6 +41,7 @@
 #include "drivers/light_ws2811strip.h"
 #include "drivers/serial.h"
 #include "drivers/vtx_common.h"
+#include "drivers/time.h"
 
 #include "fc/config.h"
 #include "fc/rc_controls.h"
@@ -1189,32 +1190,39 @@ void setProfile(ledProfile_e p)
 	// set led colors to backupColors
 	if(ledStripConfigMutable()->activeProfile == DEFAULT)
 	{
-		memcpy(ledStripConfigMutable()->backupColors, ledStripConfigMutable()->colors, LED_CONFIGURABLE_COLOR_COUNT * sizeof(ledStripConfigMutable()->colors[0]));
+		memcpy(ledStripConfig()->backupColors, ledStripConfig()->colors, LED_CONFIGURABLE_COLOR_COUNT * sizeof(ledStripConfig()->colors[0]));
 	}
 	const char *newColor;
 	switch(p) {
 		// profile 1
 		case WHITE:
 			newColor = "1, 1, 1";
-			ledStripConfigMutable()->activeProfile = WHITE;
+			ledStripConfig()->activeProfile = WHITE;
 			break;
 			// profile 2
 		case RED:
 			newColor = "0, 0, 255";
-			ledStripConfigMutable()->activeProfile = RED;
+			ledStripConfig()->activeProfile = RED;
 			break;
 
 			// profile 0
 		case DEFAULT:
 		default:
-			memcpy(ledStripConfigMutable()->colors, ledStripConfigMutable()->backupColors, LED_CONFIGURABLE_COLOR_COUNT * sizeof(ledStripConfigMutable()->colors[0]));
-			ledStripConfigMutable()->activeProfile = DEFAULT;
+			memcpy(ledStripConfig()->colors, ledStripConfigMutable()->backupColors, LED_CONFIGURABLE_COLOR_COUNT * sizeof(ledStripConfig()->colors[1]));
+			ledStripConfig()->activeProfile = DEFAULT;
 			// TODO: delete the backup ledStripConfigMutable()->backupColors
 			break;
 	}
-	for (uint8_t index = 0; index < WS2811_LED_STRIP_LENGTH; index++) {
-		parseColor(index, newColor);
+	// for (uint8_t index = 0; index < WS2811_LED_STRIP_LENGTH; index++) {
+	//	parseColor(index, newColor);
+	// }
+    for(uint8_t index = 0; index < WS2811_LED_STRIP_LENGTH; index++) {
+		const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[index];
+		if (ledGetFunction(ledConfig) == LED_FUNCTION_COLOR) {
+			*ledConfig = DEFINE_LED(ledGetX(ledConfig), ledGetY(ledConfig), newColor, ledGetDirection(ledConfig), ledGetFunction(ledConfig), ledGetOverlay(ledConfig), 0);
+		}
 	}
+	ledStripUpdate(micros());
 }
 
 #endif
