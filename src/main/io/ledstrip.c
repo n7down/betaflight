@@ -1190,9 +1190,9 @@ void setProfile(ledProfile_e p)
 	const char *newColor;
 	switch(p) {
 		// profile 1
-		case WHITE:
-			newColor = "1, 1, 1";
-			ledStripConfigMutable()->activeProfile = WHITE;
+		case GREEN:
+			newColor = "120, 0, 255";
+			ledStripConfigMutable()->activeProfile = GREEN;
 			break;
 		
 		// profile 2
@@ -1205,7 +1205,7 @@ void setProfile(ledProfile_e p)
 		case DEFAULT:
 		default:
 			newColor = "0, 0, 0";
-			ledStripConfigMutable()->activeProfile = WHITE;
+			ledStripConfigMutable()->activeProfile = DEFAULT;
 			break;
 	}
     for(uint8_t index = 0; index < WS2811_LED_STRIP_LENGTH; index++) {

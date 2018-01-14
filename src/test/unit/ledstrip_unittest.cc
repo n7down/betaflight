@@ -353,11 +353,11 @@ TEST(LedStripTest, ledProfiles)
 	// and
 	hsvColor_t expectedColor = {
 		//  H    S    V
-			1,   1,   1
+			0, 	 0,   255
 	};
 
 	// and
-	setProfile(ledProfile_e::WHITE);
+	setProfile(ledProfile_e::RED);
 
 	// then
 	for (uint8_t index = 0; index < WS2811_LED_STRIP_LENGTH; index++) {
@@ -374,7 +374,7 @@ TEST(LedStripTest, ledProfiles)
 
 	expectedColor = {
 		// H	S	V
-		   0,  0,  0
+		   0,   0,  0
 	};
 
 	// default profile

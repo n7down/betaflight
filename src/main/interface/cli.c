@@ -1280,7 +1280,7 @@ static void cliLedProfile(char *cmdline)
 		ledProfile_e p = ledStripConfig()->activeProfile;
 		switch(p) {
 			case WHITE:
-				cliPrintLine("white");
+				cliPrintLine("green");
 				break;
 			case RED:
 				cliPrintLine("red");
@@ -1297,12 +1297,15 @@ static void cliLedProfile(char *cmdline)
 		switch(i) {
 			case 0:
 				setProfile(DEFAULT);
+				cliPrintLine("set profile: default");
 				break;
 			case 1:
-				setProfile(WHITE);
+				setProfile(GREEN);
+				cliPrintLine("set profile: green");
 				break;
 			case 2:
 				setProfile(RED);
+				cliPrintLine("set profile: red");
 				break;
 			default:
 				cliShowArgumentRangeError("index", 0, 2);
