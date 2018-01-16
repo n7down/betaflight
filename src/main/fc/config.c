@@ -76,6 +76,7 @@ PG_REGISTER_WITH_RESET_TEMPLATE(systemConfig_t, systemConfig, PG_SYSTEM_CONFIG, 
 PG_RESET_TEMPLATE(systemConfig_t, systemConfig,
     .pidProfileIndex = 0,
     .activeRateProfile = 0,
+	.activeLedProfile = 0;
     .debug_mode = DEBUG_MODE,
     .task_statistics = true,
     .cpu_overclock = false,

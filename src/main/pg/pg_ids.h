@@ -75,6 +75,7 @@
 #define PG_SERVO_CONFIG 52
 #define PG_IBUS_TELEMETRY_CONFIG 53 // CF 1.x
 //#define PG_VTX_CONFIG 54 // CF 1.x
+#define PG_LED_STRIP_PROFILES 55
 
 // Driver configuration
 #define PG_DRIVER_PWM_RX_CONFIG 100 // does not exist in betaflight
