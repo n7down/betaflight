@@ -1279,7 +1279,8 @@ static void cliLed(char *cmdline)
     const char *ptr;
 
     if (isEmpty(cmdline)) {
-        printLed(DUMP_MASTER, ledStripConfig()->ledConfigs, NULL);
+		const ledStripConfig_t *activeLedStripProfile = ledStripProfiles(systemConfig()->activeLedProfile);
+        printLed(DUMP_MASTER, activeLedStripProfile->ledConfigs, NULL);
     } else {
         ptr = cmdline;
         i = atoi(ptr);
@@ -1314,7 +1315,8 @@ static void printColor(uint8_t dumpMask, const hsvColor_t *colors, const hsvColo
 static void cliColor(char *cmdline)
 {
     if (isEmpty(cmdline)) {
-        printColor(DUMP_MASTER, ledStripConfig()->colors, NULL);
+		const ledStripConfig_t *activeLedStripProfile = ledStripProfiles(systemConfig()->activeLedProfile);
+        printColor(DUMP_MASTER, activeLedStripProfile->colors, NULL);
     } else {
         const char *ptr = cmdline;
         const int i = atoi(ptr);
@@ -1334,7 +1336,8 @@ static void printModeColor(uint8_t dumpMask, const ledStripConfig_t *ledStripCon
     const char *format = "mode_color %u %u %u";
     for (uint32_t i = 0; i < LED_MODE_COUNT; i++) {
         for (uint32_t j = 0; j < LED_DIRECTION_COUNT; j++) {
-            int colorIndex = ledStripConfig->modeColors[i].color[j];
+			const ledStripConfig_t *activeLedStripProfile = ledStripProfiles(systemConfig()->activeLedProfile);
+            int colorIndex = activeLedStripProfile->modeColors[i].color[j];
             bool equalsDefault = false;
             if (defaultLedStripConfig) {
                 int colorIndexDefault = defaultLedStripConfig->modeColors[i].color[j];
@@ -1346,7 +1349,8 @@ static void printModeColor(uint8_t dumpMask, const ledStripConfig_t *ledStripCon
     }
 
     for (uint32_t j = 0; j < LED_SPECIAL_COLOR_COUNT; j++) {
-        const int colorIndex = ledStripConfig->specialColors.color[j];
+        const ledStripConfig_t *activeLedStripProfile = ledStripProfiles(systemConfig()->activeLedProfile);
+		const int colorIndex = activeLedStripProfile->specialColors.color[j];
         bool equalsDefault = false;
         if (defaultLedStripConfig) {
             const int colorIndexDefault = defaultLedStripConfig->specialColors.color[j];
@@ -1369,7 +1373,8 @@ static void printModeColor(uint8_t dumpMask, const ledStripConfig_t *ledStripCon
 static void cliModeColor(char *cmdline)
 {
     if (isEmpty(cmdline)) {
-        printModeColor(DUMP_MASTER, ledStripConfig(), NULL);
+        const ledStripConfig_t *activeLedStripProfile = ledStripProfiles(systemConfig()->activeLedProfile);
+        printModeColor(DUMP_MASTER, activeLedStripProfile, NULL);
     } else {
         enum {MODE = 0, FUNCTION, COLOR, ARGS_COUNT};
         int args[ARGS_COUNT];
@@ -3549,13 +3554,14 @@ static void printConfig(char *cmdline, bool doDiff)
 
 #ifdef USE_LED_STRIP
         cliPrintHashLine("led");
-        printLed(dumpMask, ledStripConfig_Copy.ledConfigs, ledStripConfig()->ledConfigs);
+		const ledStripConfig_t *activeLedStripProfile = ledStripProfiles(systemConfig()->activeLedProfile);
+        printLed(dumpMask, ledStripConfig_Copy.ledConfigs, activeLedStripProfile->ledConfigs);
 
         cliPrintHashLine("color");
-        printColor(dumpMask, ledStripConfig_Copy.colors, ledStripConfig()->colors);
+        printColor(dumpMask, ledStripConfig_Copy.colors, activeLedStripProfile->colors);
 
         cliPrintHashLine("mode_color");
-        printModeColor(dumpMask, &ledStripConfig_Copy, ledStripConfig());
+        printModeColor(dumpMask, &ledStripConfig_Copy, activeLedStripProfile);
 #endif
 
         cliPrintHashLine("aux");

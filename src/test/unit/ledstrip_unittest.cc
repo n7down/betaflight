@@ -69,8 +69,10 @@ extern "C" {
 
 TEST(LedStripTest, parseLedStripConfig)
 {
-    // given
-    memset(&ledStripConfigMutable()->ledConfigs, 0, LED_MAX_STRIP_LENGTH);
+    const ledStripConfig_t *currentLedStripProfile = ledStripProfiles(systemConfig()->activeLedProfile);
+	
+	// given
+    memset(currentLedStripProfile->ledConfigs, 0, LED_MAX_STRIP_LENGTH);
 
     // and
     static const ledConfig_t expectedLedStripConfig[WS2811_LED_STRIP_LENGTH] = {
@@ -175,7 +177,7 @@ TEST(LedStripTest, parseLedStripConfig)
 #ifdef DEBUG_LEDSTRIP
         printf("iteration: %d\n", index);
 #endif
-        EXPECT_EQ(expectedLedStripConfig[index], ledStripConfig()->ledConfigs[index]);
+        EXPECT_EQ(expectedLedStripConfig[index], currentLedStripProfile->ledConfigs[index]);
     }
 
     // then

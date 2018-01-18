@@ -196,7 +196,8 @@ STATIC_UNIT_TESTED void updateDimensions(void)
     int minY = LED_XY_MASK;
 
     for (int ledIndex = 0; ledIndex < ledCounts.count; ledIndex++) {
-        const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[ledIndex];
+        // const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[ledIndex];
+		const ledConfig_t *ledConfig = ledStripProfiels(systemConfig->activeLedProfile)->ledConfigs[ledIndex];
 
         int ledX = ledGetX(ledConfig);
         maxX = MAX(ledX, maxX);
@@ -230,7 +231,8 @@ STATIC_UNIT_TESTED void updateLedCount(void)
     int count = 0, countRing = 0, countScanner= 0;
 
     for (int ledIndex = 0; ledIndex < LED_MAX_STRIP_LENGTH; ledIndex++) {
-        const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[ledIndex];
+       	// const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[ledIndex];
+		const ledConfig_t *ledConfig = ledStripProfiles(systemConfig->activeLedProfile)->ledConfig[ledIndex]; 
 
         if (!(*ledConfig))
             break;
@@ -283,8 +285,9 @@ bool parseLedStripConfig(int ledIndex, const char *config)
     };
     static const char chunkSeparators[PARSE_STATE_COUNT] = {',', ':', ':', ':', '\0'};
 
-    ledConfig_t *ledConfig = &ledStripConfigMutable()->ledConfigs[ledIndex];
-    memset(ledConfig, 0, sizeof(ledConfig_t));
+    //ledConfig_t *ledConfig = &ledStripConfigMutable()->ledConfigs[ledIndex];
+    ledConfig_t *ledConfig = ledStripProfiles(systemConfig->actvieLedProfile)->ledConfigs[ledIndex];
+	memset(ledConfig, 0, sizeof(ledConfig_t));
 
     int x = 0, y = 0, color = 0;   // initialize to prevent warnings
     int baseFunction = 0;
