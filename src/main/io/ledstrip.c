@@ -287,8 +287,8 @@ bool parseLedStripConfig(int ledIndex, const char *config)
     static const char chunkSeparators[PARSE_STATE_COUNT] = {',', ':', ':', ':', '\0'};
 
     //ledConfig_t *ledConfig = &ledStripConfigMutable()->ledConfigs[ledIndex];
-    ledConfig_t *ledConfig = ledStripProfiles(systemConfig()->activeLedProfile)->ledConfigs[ledIndex];
-	memset(ledConfig, 0, sizeof(ledConfig_t));
+  	const ledConfig_t *ledConfig = &ledStripProfiles(systemConfig()->activeLedProfile)->ledConfigs[ledIndex];
+	memset((void *)ledConfig, 0, sizeof(ledConfig_t));
 
     int x = 0, y = 0, color = 0;   // initialize to prevent warnings
     int baseFunction = 0;
