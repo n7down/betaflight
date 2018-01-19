@@ -69,7 +69,7 @@
 #define LED_X_BIT_OFFSET 4
 #define LED_Y_BIT_OFFSET 0
 #define LED_XY_MASK      0x0F
-#define CALCULATE_LED_XY(x, y) ((((x) & LED_XY_MASK) << LED_X_BIT_OFFSET) | (((y) & LED_XY_MASK) << LED_Y_BIT_OFFSET))i
+#define CALCULATE_LED_XY(x, y) ((((x) & LED_XY_MASK) << LED_X_BIT_OFFSET) | (((y) & LED_XY_MASK) << LED_Y_BIT_OFFSET))
 
 #define LED_STRIP_PROFILE_COUNT 2 
 

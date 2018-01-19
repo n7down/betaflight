@@ -3554,14 +3554,14 @@ static void printConfig(char *cmdline, bool doDiff)
 
 #ifdef USE_LED_STRIP
         cliPrintHashLine("led");
-		const ledStripConfig_t *activeLedStripProfile = ledStripProfiles(systemConfig()->activeLedProfile);
-        printLed(dumpMask, ledStripConfig_Copy.ledConfigs, activeLedStripProfile->ledConfigs);
+		//const ledStripConfig_t *activeLedStripProfile = ledStripProfiles(systemConfig()->activeLedProfile);
+        //printLed(dumpMask, ledStripConfig_Copy.ledConfigs, activeLedStripProfile->ledConfigs);
 
         cliPrintHashLine("color");
-        printColor(dumpMask, ledStripConfig_Copy.colors, activeLedStripProfile->colors);
+        //printColor(dumpMask, ledStripConfig_Copy.colors, activeLedStripProfile->colors);
 
         cliPrintHashLine("mode_color");
-        printModeColor(dumpMask, &ledStripConfig_Copy, activeLedStripProfile);
+        //printModeColor(dumpMask, &ledStripConfig_Copy, activeLedStripProfile);
 #endif
 
         cliPrintHashLine("aux");
