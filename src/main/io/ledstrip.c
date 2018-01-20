@@ -287,7 +287,7 @@ bool parseLedStripConfig(int ledIndex, const char *config)
     static const char chunkSeparators[PARSE_STATE_COUNT] = {',', ':', ':', ':', '\0'};
 
     //ledConfig_t *ledConfig = &ledStripConfigMutable()->ledConfigs[ledIndex];
-  	const ledConfig_t *ledConfig = &ledStripProfiles(systemConfig()->activeLedProfile)->ledConfigs[ledIndex];
+  	ledConfig_t *ledConfig = &ledStripProfilesMutable(systemConfig()->activeLedProfile)->ledConfigs[ledIndex];
 	memset((void *)ledConfig, 0, sizeof(ledConfig_t));
 
     int x = 0, y = 0, color = 0;   // initialize to prevent warnings
@@ -426,7 +426,7 @@ static hsvColor_t* getDirectionalModeColor(const int ledIndex, const modeColorIn
     for (unsigned i = 0; i < LED_DIRECTION_COUNT; i++) {
         if (ledDirection & (1 << i)) {
             // return &ledStripConfigMutable()->colors[modeColors->color[i]];
-        	return &ledStripProfiles(systemConfig()->activeLedProfile)->colors[modeColors->color[i]];
+        	return &ledStripProfilesMutable(systemConfig()->activeLedProfile)->colors[modeColors->color[i]];
 		}
     }
 
@@ -531,7 +531,7 @@ static void applyLedHsv(uint32_t mask, const hsvColor_t *color)
 {
     for (int ledIndex = 0; ledIndex < ledCounts.count; ledIndex++) {
         // const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[ledIndex];
-        const ledConfig_t *ledConfig = &ledStripProfile(systemConfig()->activeLedProfile)->ledConfigs[ledIndex];
+        const ledConfig_t *ledConfig = &ledStripProfiles(systemConfig()->activeLedProfile)->ledConfigs[ledIndex];
 		if ((*ledConfig & mask) == mask)
             setLedHsv(ledIndex, color);
     }
@@ -829,7 +829,7 @@ static void applyLedIndicatorLayer(bool updateNow, timeUs_t *timer)
 
     for (int ledIndex = 0; ledIndex < ledCounts.count; ledIndex++) {
         // const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[ledIndex];
-        const ledConfig_t *ledConfig = &ledStripProfile(systemConfig()->activeLedProfile)->ledConfigs[ledIndex];
+        const ledConfig_t *ledConfig = &ledStripProfiles(systemConfig()->activeLedProfile)->ledConfigs[ledIndex];
 		if (ledGetOverlayBit(ledConfig, LED_OVERLAY_INDICATOR)) {
             if (getLedQuadrant(ledIndex) & quadrants)
                 setLedHsv(ledIndex, flashColor);
@@ -1117,7 +1117,7 @@ bool parseColor(int index, const char *colorConfig)
     const char *remainingCharacters = colorConfig;
 
     // hsvColor_t *color = &ledStripConfigMutable()->colors[index];
-	hsvColor_t *color = &ledStripProfiles(systemConfig()->activeLedProfile)->colors[index];
+	hsvColor_t *color = &ledStripProfilesMutable(systemConfig()->activeLedProfile)->colors[index];
 
     bool result = true;
     static const uint16_t hsv_limit[HSV_COLOR_COMPONENT_COUNT] = {
@@ -1171,17 +1171,17 @@ bool setModeColor(ledModeIndex_e modeIndex, int modeColorIndex, int colorIndex)
         if (modeColorIndex < 0 || modeColorIndex >= LED_DIRECTION_COUNT)
             return false;
         // ledStripConfigMutable()->modeColors[modeIndex].color[modeColorIndex] = colorIndex;
-    	ledStripProfiles(systemConfig()->activeLedProfile)->modeColors[modeIndex].color[modeColorIndex] = colorIndex;
+    	ledStripProfilesMutable(systemConfig()->activeLedProfile)->modeColors[modeIndex].color[modeColorIndex] = colorIndex;
 	} else if (modeIndex == LED_SPECIAL) {
         if (modeColorIndex < 0 || modeColorIndex >= LED_SPECIAL_COLOR_COUNT)
             return false;
         // ledStripConfigMutable()->specialColors.color[modeColorIndex] = colorIndex;
-    	ledStripProfiles(systemConfig()->activeLedProfile)->specialColors.color[modeColorIndex] = colorIndex;
+    	ledStripProfilesMutable(systemConfig()->activeLedProfile)->specialColors.color[modeColorIndex] = colorIndex;
 	} else if (modeIndex == LED_AUX_CHANNEL) {
         if (modeColorIndex < 0 || modeColorIndex >= 1)
             return false;
         // ledStripConfigMutable()->ledstrip_aux_channel = colorIndex;
-    	ledStripProfiles(systemConfig()->activeLedProfile)->ledstrip_aux_channel = colorIndex;
+    	ledStripProfilesMutable(systemConfig()->activeLedProfile)->ledstrip_aux_channel = colorIndex;
 	} else {
         return false;
     }
@@ -1191,7 +1191,7 @@ bool setModeColor(ledModeIndex_e modeIndex, int modeColorIndex, int colorIndex)
 void ledStripInit(void)
 {
     // colors = ledStripConfigMutable()->colors;
-    colors = ledStripProfiles(systemConfig()->activeLedProfile)->colors;
+    colors = ledStripProfilesMutable(systemConfig()->activeLedProfile)->colors;
 	// modeColors = ledStripConfig()->modeColors;
     modeColors = ledStripProfiles(systemConfig()->activeLedProfile)->modeColors;
 	// specialColors = ledStripConfig()->specialColors;

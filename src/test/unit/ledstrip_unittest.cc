@@ -69,7 +69,7 @@ extern "C" {
 
 TEST(LedStripTest, parseLedStripConfig)
 {
-    const ledStripConfig_t *currentLedStripProfile = ledStripProfiles(systemConfig()->activeLedProfile);
+    ledStripConfig_t *currentLedStripProfile = ledStripProfilesMutable(systemConfig()->activeLedProfile);
 	
 	// given
     memset(currentLedStripProfile->ledConfigs, 0, LED_MAX_STRIP_LENGTH);
@@ -192,8 +192,10 @@ TEST(LedStripTest, parseLedStripConfig)
 
 TEST(LedStripTest, smallestGridWithCenter)
 {
+	ledStripConfig_t *currentLedStripConfig = &ledStripProfilesMutable(systemConfig()->activeLedProfile);
+
     // given
-    memset(&ledStripConfigMutable()->ledConfigs, 0, LED_MAX_STRIP_LENGTH);
+    memset(currentLedStripConfig->ledConfigs, 0, LED_MAX_STRIP_LENGTH);
 
     // and
     static const ledConfig_t testLedConfigs[] = {
@@ -205,7 +207,7 @@ TEST(LedStripTest, smallestGridWithCenter)
         DEFINE_LED(0, 1, 0, LD(SOUTH) | LD(WEST), LF(FLIGHT_MODE), LO(WARNING), 0),
         DEFINE_LED(0, 2, 0, LD(SOUTH), LF(ARM_STATE), LO(INDICATOR), 0)
     };
-    memcpy(&ledStripConfigMutable()->ledConfigs, &testLedConfigs, sizeof(testLedConfigs));
+    memcpy(currentLedStripProfile->ledConfigs, &testLedConfigs, sizeof(testLedConfigs));
 
     // when
     reevaluateLedConfig();
@@ -220,8 +222,10 @@ TEST(LedStripTest, smallestGridWithCenter)
 
 TEST(LedStripTest, smallestGrid)
 {
+	ledConfig_t *currentLedStripProfile = &ledStripProfilesMutable(systemConfig()->activeLedProfile);
+
     // given
-    memset(&ledStripConfigMutable()->ledConfigs, 0, LED_MAX_STRIP_LENGTH);
+    memset(currentLedStripProfile->ledConfigs, 0, LED_MAX_STRIP_LENGTH);
 
     // and
     static const ledConfig_t testLedConfigs[] = {
@@ -230,7 +234,7 @@ TEST(LedStripTest, smallestGrid)
         DEFINE_LED(0, 0, 0, LD(NORTH) | LD(WEST), LF(FLIGHT_MODE), LO(INDICATOR), 0),
         DEFINE_LED(0, 1, 0, LD(SOUTH) | LD(WEST), LF(FLIGHT_MODE), LO(INDICATOR), 0)
     };
-    memcpy(&ledStripConfigMutable()->ledConfigs, &testLedConfigs, sizeof(testLedConfigs));
+    memcpy(currentLedStripProfile->ledConfigs, &testLedConfigs, sizeof(testLedConfigs));
 
     // when
     reevaluateLedConfig();
@@ -251,8 +255,10 @@ extern hsvColor_t *colors;
 
 TEST(ColorTest, parseColor)
 {
+	ledConfig_t *currentLedStripProfile = &ledStripProfilesMutable(systemConfig()->activeLedProfile);
+
     // given
-    memset(ledStripConfigMutable()->colors, 0, sizeof(hsvColor_t) * LED_CONFIGURABLE_COLOR_COUNT);
+    memset(currentLedStripProfile->colors, 0, sizeof(hsvColor_t) * LED_CONFIGURABLE_COLOR_COUNT);
 
     // and
     const hsvColor_t expectedColors[TEST_COLOR_COUNT] = {
@@ -286,9 +292,9 @@ TEST(ColorTest, parseColor)
         printf("iteration: %d\n", index);
 #endif
 
-        EXPECT_EQ(expectedColors[index].h, ledStripConfig()->colors[index].h);
-        EXPECT_EQ(expectedColors[index].s, ledStripConfig()->colors[index].s);
-        EXPECT_EQ(expectedColors[index].v, ledStripConfig()->colors[index].v);
+        EXPECT_EQ(expectedColors[index].h, currentLedStripProfile->colors[index].h);
+        EXPECT_EQ(expectedColors[index].s, currentLedStripProfile->colors[index].s);
+        EXPECT_EQ(expectedColors[index].v, currentLedStripProfile->colors[index].v);
     }
 }
 
