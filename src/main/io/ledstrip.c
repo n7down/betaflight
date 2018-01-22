@@ -160,9 +160,33 @@ static const specialColorIndexes_t defaultSpecialColors[] = {
     }}
 };
 
-void pgResetFn_ledStripConfig(ledStripConfig_t *ledStripConfig)
+//void pgResetFn_ledStripConfig(ledStripConfig_t *ledStripConfig)
+//{
+//    memset(ledStripConfig->ledConfigs, 0, LED_MAX_STRIP_LENGTH * sizeof(ledConfig_t));
+//    // copy hsv colors as default
+//    memset(ledStripConfig->colors, 0, ARRAYLEN(hsv) * sizeof(hsvColor_t));
+//    BUILD_BUG_ON(LED_CONFIGURABLE_COLOR_COUNT < ARRAYLEN(hsv));
+//    for (unsigned colorIndex = 0; colorIndex < ARRAYLEN(hsv); colorIndex++) {
+//        ledStripConfig->colors[colorIndex] = hsv[colorIndex];
+//    }
+//    memcpy_fn(&ledStripConfig->modeColors, &defaultModeColors, sizeof(defaultModeColors));
+//    memcpy_fn(&ledStripConfig->specialColors, &defaultSpecialColors, sizeof(defaultSpecialColors));
+//    ledStripConfig->ledstrip_visual_beeper = 0;
+//    ledStripConfig->ledstrip_aux_channel = THROTTLE;
+//
+//    for (int i = 0; i < USABLE_TIMER_CHANNEL_COUNT; i++) {
+//        if (timerHardware[i].usageFlags & TIM_USE_LED) {
+//            ledStripConfig->ioTag = timerHardware[i].tag;
+//            return;
+//        }
+//    }
+//    ledStripConfig->ioTag = IO_TAG_NONE;
+//}
+
+void pgResetFn_ledStripProfiles(ledStripConfig_t *ledStripConfig)
 {
-    memset(ledStripConfig->ledConfigs, 0, LED_MAX_STRIP_LENGTH * sizeof(ledConfig_t));
+	// TODO: reset each of the profiles
+	memset(ledStripConfig->ledConfigs, 0, LED_MAX_STRIP_LENGTH * sizeof(ledConfig_t));
     // copy hsv colors as default
     memset(ledStripConfig->colors, 0, ARRAYLEN(hsv) * sizeof(hsvColor_t));
     BUILD_BUG_ON(LED_CONFIGURABLE_COLOR_COUNT < ARRAYLEN(hsv));

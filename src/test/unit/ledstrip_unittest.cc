@@ -27,6 +27,7 @@ extern "C" {
     #include "common/axis.h"
     #include "common/color.h"
 
+    #include "pg/pg.h"
     #include "pg/pg_ids.h"
 
     #include "drivers/io.h"
@@ -66,7 +67,12 @@ extern "C" {
 
     PG_REGISTER(batteryConfig_t, batteryConfig, PG_BATTERY_CONFIG, 0);
 
+	PG_REGISTER(systemConfig_t, systemConfig, PG_SYSTEM_CONFIG, 0);
+
 	PG_REGISTER_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles, PG_LED_STRIP_PROFILES, 0);
+	
+	PG_DECLARE_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles);
+
 }
 
 TEST(LedStripTest, parseLedStripConfig)
