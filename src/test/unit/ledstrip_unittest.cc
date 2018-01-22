@@ -65,6 +65,8 @@ extern "C" {
     void reevaluateLedConfig();
 
     PG_REGISTER(batteryConfig_t, batteryConfig, PG_BATTERY_CONFIG, 0);
+
+	PG_REGISTER_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles, PG_LED_STRIP_PROFILES, 0);
 }
 
 TEST(LedStripTest, parseLedStripConfig)
@@ -192,7 +194,7 @@ TEST(LedStripTest, parseLedStripConfig)
 
 TEST(LedStripTest, smallestGridWithCenter)
 {
-	ledStripConfig_t *currentLedStripConfig = &ledStripProfilesMutable(systemConfig()->activeLedProfile);
+	ledStripConfig_t *currentLedStripConfig = ledStripProfilesMutable(systemConfig()->activeLedProfile);
 
     // given
     memset(currentLedStripConfig->ledConfigs, 0, LED_MAX_STRIP_LENGTH);
@@ -222,7 +224,7 @@ TEST(LedStripTest, smallestGridWithCenter)
 
 TEST(LedStripTest, smallestGrid)
 {
-	ledConfig_t *currentLedStripProfile = &ledStripProfilesMutable(systemConfig()->activeLedProfile);
+	ledStripConfig_t *currentLedStripProfile = ledStripProfilesMutable(systemConfig()->activeLedProfile);
 
     // given
     memset(currentLedStripProfile->ledConfigs, 0, LED_MAX_STRIP_LENGTH);
@@ -255,7 +257,7 @@ extern hsvColor_t *colors;
 
 TEST(ColorTest, parseColor)
 {
-	ledConfig_t *currentLedStripProfile = &ledStripProfilesMutable(systemConfig()->activeLedProfile);
+	ledStripConfig_t *currentLedStripProfile = ledStripProfilesMutable(systemConfig()->activeLedProfile);
 
     // given
     memset(currentLedStripProfile->colors, 0, sizeof(hsvColor_t) * LED_CONFIGURABLE_COLOR_COUNT);
