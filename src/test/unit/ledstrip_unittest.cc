@@ -69,9 +69,9 @@ extern "C" {
 
 	PG_REGISTER(systemConfig_t, systemConfig, PG_SYSTEM_CONFIG, 0);
 
-	PG_REGISTER_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles, PG_LED_STRIP_PROFILES, 0);
+	// PG_REGISTER_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles, PG_LED_STRIP_PROFILES, 0);
 	
-	PG_DECLARE_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles);
+	// PG_DECLARE_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles);
 
 }
 
@@ -200,10 +200,10 @@ TEST(LedStripTest, parseLedStripConfig)
 
 TEST(LedStripTest, smallestGridWithCenter)
 {
-	ledStripConfig_t *currentLedStripConfig = ledStripProfilesMutable(systemConfig()->activeLedProfile);
+	ledStripConfig_t *currentLedStripProfile = ledStripProfilesMutable(systemConfig()->activeLedProfile);
 
     // given
-    memset(currentLedStripConfig->ledConfigs, 0, LED_MAX_STRIP_LENGTH);
+    memset(currentLedStripProfile->ledConfigs, 0, LED_MAX_STRIP_LENGTH);
 
     // and
     static const ledConfig_t testLedConfigs[] = {
@@ -253,6 +253,11 @@ TEST(LedStripTest, smallestGrid)
     EXPECT_EQ(1, lowestXValueForEast);
     EXPECT_EQ(0, highestYValueForNorth);
     EXPECT_EQ(1, lowestYValueForSouth);
+}
+
+TEST(LedStripTest, LedStripProfiles)
+{
+	// TODO: test the profiles
 }
 
 hsvColor_t testColors[LED_CONFIGURABLE_COLOR_COUNT];

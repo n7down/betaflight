@@ -160,6 +160,14 @@ static const specialColorIndexes_t defaultSpecialColors[] = {
     }}
 };
 
+void setLedStripProfile(uint8_t ledStripProfileIndex)
+{
+    if (ledStripProfileIndex < LED_STRIP_PROFILE_COUNT) {
+        systemConfigMutable()->activeLedProfile = ledStripProfileIndex;
+        currentLedStripProfile = ledStripProfilesMutable(ledStripProfileIndex);
+    }
+}
+
 //void pgResetFn_ledStripConfig(ledStripConfig_t *ledStripConfig)
 //{
 //    memset(ledStripConfig->ledConfigs, 0, LED_MAX_STRIP_LENGTH * sizeof(ledConfig_t));
@@ -183,28 +191,50 @@ static const specialColorIndexes_t defaultSpecialColors[] = {
 //    ledStripConfig->ioTag = IO_TAG_NONE;
 //}
 
-void pgResetFn_ledStripProfiles(ledStripConfig_t *ledStripConfig)
+//void pgResetFn_ledStripProfiles(ledStripConfig_t *ledStripConfig)
+void pgResetFn_ledStripProfiles()
 {
-	// TODO: reset each of the profiles
-	memset(ledStripConfig->ledConfigs, 0, LED_MAX_STRIP_LENGTH * sizeof(ledConfig_t));
-    // copy hsv colors as default
-    memset(ledStripConfig->colors, 0, ARRAYLEN(hsv) * sizeof(hsvColor_t));
-    BUILD_BUG_ON(LED_CONFIGURABLE_COLOR_COUNT < ARRAYLEN(hsv));
-    for (unsigned colorIndex = 0; colorIndex < ARRAYLEN(hsv); colorIndex++) {
-        ledStripConfig->colors[colorIndex] = hsv[colorIndex];
-    }
-    memcpy_fn(&ledStripConfig->modeColors, &defaultModeColors, sizeof(defaultModeColors));
-    memcpy_fn(&ledStripConfig->specialColors, &defaultSpecialColors, sizeof(defaultSpecialColors));
-    ledStripConfig->ledstrip_visual_beeper = 0;
-    ledStripConfig->ledstrip_aux_channel = THROTTLE;
+    // for (int i = 0; i < CONTROL_RATE_PROFILE_COUNT; i++) {
+    //    RESET_CONFIG(controlRateConfig_t, &controlRateConfig[i],
+    //        .rcRate8 = 100,
+    //        .rcYawRate8 = 100,
+    //        .rcExpo8 = 0,
+    //        .thrMid8 = 50,
+    //        .thrExpo8 = 0,
+    //        .dynThrPID = 10,
+    //        .rcYawExpo8 = 0,
+    //        .tpa_breakpoint = 1650,
+    //        .rates[FD_ROLL] = 70,
+    //        .rates[FD_PITCH] = 70,
+    //        .rates[FD_YAW] = 70
+    //    );
+	// }
 
-    for (int i = 0; i < USABLE_TIMER_CHANNEL_COUNT; i++) {
-        if (timerHardware[i].usageFlags & TIM_USE_LED) {
-            ledStripConfig->ioTag = timerHardware[i].tag;
-            return;
-        }
-    }
-    ledStripConfig->ioTag = IO_TAG_NONE;
+	for(int i = 0; i < LED_STRIP_PROFILE_COUNT; i++) {
+		setLedStripProfile(i);
+		ledStripConfig_t *ledStripConfigToReset = ledStripProfilesMutable(systemConfig()->activeLedProfile);
+
+		// TODO: reset each of the profiles
+		memset(ledStripConfigToReset->ledConfigs, 0, LED_MAX_STRIP_LENGTH * sizeof(ledConfig_t));
+    	// copy hsv colors as default
+   		memset(ledStripConfigToReset->colors, 0, ARRAYLEN(hsv) * sizeof(hsvColor_t));
+    	BUILD_BUG_ON(LED_CONFIGURABLE_COLOR_COUNT < ARRAYLEN(hsv));
+    	for (unsigned colorIndex = 0; colorIndex < ARRAYLEN(hsv); colorIndex++) {
+        	ledStripConfigToReset->colors[colorIndex] = hsv[colorIndex];
+    	}
+    	memcpy_fn(&ledStripConfigToReset->modeColors, &defaultModeColors, sizeof(defaultModeColors));
+    	memcpy_fn(&ledStripConfigToReset->specialColors, &defaultSpecialColors, sizeof(defaultSpecialColors));
+    	ledStripConfigToReset->ledstrip_visual_beeper = 0;
+    	ledStripConfigToReset->ledstrip_aux_channel = THROTTLE;
+
+    	for (int i = 0; i < USABLE_TIMER_CHANNEL_COUNT; i++) {
+        	if (timerHardware[i].usageFlags & TIM_USE_LED) {
+            	ledStripConfigToReset->ioTag = timerHardware[i].tag;
+            	return;
+        	}
+    	}
+   		ledStripConfigToReset->ioTag = IO_TAG_NONE;
+	}
 }
 
 static int scaledThrottle;
@@ -1239,3 +1269,4 @@ static void ledStripDisable(void)
     ws2811UpdateStrip();
 }
 #endif
+

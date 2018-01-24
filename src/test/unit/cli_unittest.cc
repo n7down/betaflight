@@ -81,6 +81,7 @@ extern "C" {
     PG_REGISTER(pidConfig_t, pidConfig, PG_PID_CONFIG, 0);
 
 	PG_REGISTER_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles, PG_LED_STRIP_PROFILES, 0);
+	//PG_DECLARE_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles);
 
     PG_REGISTER_WITH_RESET_FN(int8_t, unitTestData, PG_RESERVED_FOR_TESTING_1, 0);
 }
