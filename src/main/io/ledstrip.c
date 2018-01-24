@@ -192,7 +192,7 @@ void setLedStripProfile(uint8_t ledStripProfileIndex)
 //}
 
 //void pgResetFn_ledStripProfiles(ledStripConfig_t *ledStripConfig)
-void pgResetFn_ledStripProfiles()
+void pgResetFn_ledStripProfiles(ledStripConfig_t *ledStripConfig)
 {
     // for (int i = 0; i < CONTROL_RATE_PROFILE_COUNT; i++) {
     //    RESET_CONFIG(controlRateConfig_t, &controlRateConfig[i],
@@ -693,8 +693,9 @@ static void applyLedVtxLayer(bool updateNow, timeUs_t *timer)
     if (showSettings) { // show settings
         uint8_t vtxLedCount = 0;
         for (int i = 0; i < ledCounts.count && vtxLedCount < 6; ++i) {
-            const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[i];
-            if (ledGetOverlayBit(ledConfig, LED_OVERLAY_VTX)) {
+            // const ledConfig_t *ledConfig = &ledStripConfig()->ledConfigs[i];
+            const ledConfig_t *ledConfig = &ledStripProfiles(systemConfig()->activeLedProfile)->ledConfigs[i];
+			if (ledGetOverlayBit(ledConfig, LED_OVERLAY_VTX)) {
                 if (vtxLedCount == 0) {
                     color.h = HSV(GREEN).h;
                     color.s = HSV(GREEN).s;
@@ -735,8 +736,9 @@ static void applyLedVtxLayer(bool updateNow, timeUs_t *timer)
         } else {
             colorIndex = COLOR_DEEP_PINK;
         }
-        hsvColor_t color = ledStripConfig()->colors[colorIndex];
-        color.v = pit ? (blink ? 15 : 0) : 255; // blink when in pit mode
+        // hsvColor_t color = ledStripConfig()->colors[colorIndex];
+        hsvColor_t color = ledStripProfilesMutable(systemConfig()->activeLedProfile)->colors[colorIndex];
+		color.v = pit ? (blink ? 15 : 0) : 255; // blink when in pit mode
         applyLedHsv(LED_MOV_OVERLAY(LED_FLAG_OVERLAY(LED_OVERLAY_VTX)), &color);
     }
 }
