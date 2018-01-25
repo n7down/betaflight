@@ -1281,7 +1281,7 @@ static void cliLedProfile(char *cmdline)
 	{
 		int activeLedStripProfile = systemConfig()->activeLedStripProfile;
 		char profile[1];
-		char *profile = itoa(activeLedStripProfile);
+		itoa(activeLedStripProfile, profile, 1);
 		cliPrintLine(profile);
 	} else {
 		ptr = cmdline;
