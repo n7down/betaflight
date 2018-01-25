@@ -1273,6 +1273,25 @@ static void printLed(uint8_t dumpMask, const ledConfig_t *ledConfigs, const ledC
     }
 }
 
+static void cliLedProfile(char *cmdline)
+{
+	int i;
+	const char *ptr;
+	if(isEmpty(cmdline))
+	{
+		int activeLedStripProfile = systemConfig()->activeLedStripProfile;
+		cliPrintLine(activeLedStripProfile);
+	} else {
+		ptr = cmdline;
+		i = atoi(ptr);
+		if(i < LED_STRIP_PROFILE_COUNT) {
+			setLedStripProfile(i);
+		} else {
+			cliShowArgumentRangeError("index", 0, LED_STRIP_PROFILE_COUNT - 1);
+		}
+	}
+}
+
 static void cliLed(char *cmdline)
 {
     int i;
@@ -3706,6 +3725,7 @@ const clicmd_t cmdTable[] = {
     CLI_COMMAND_DEF("help", NULL, NULL, cliHelp),
 #ifdef USE_LED_STRIP
     CLI_COMMAND_DEF("led", "configure leds", NULL, cliLed),
+	CLI_COMMAND_DEF("led_profile", "set led profile", NULL, cliLedProfile),
 #endif
     CLI_COMMAND_DEF("map", "configure rc channel order", "[<map>]", cliMap),
 #ifndef USE_QUAD_MIXER_ONLY
