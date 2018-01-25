@@ -1275,12 +1275,14 @@ static void printLed(uint8_t dumpMask, const ledConfig_t *ledConfigs, const ledC
 
 static void cliLedProfile(char *cmdline)
 {
-	int i;
+	uint8_t i;
 	const char *ptr;
 	if(isEmpty(cmdline))
 	{
 		int activeLedStripProfile = systemConfig()->activeLedStripProfile;
-		cliPrintLine(activeLedStripProfile);
+		char profile[1];
+		char *profile = itoa(activeLedStripProfile);
+		cliPrintLine(profile);
 	} else {
 		ptr = cmdline;
 		i = atoi(ptr);

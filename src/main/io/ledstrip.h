@@ -191,3 +191,5 @@ void applyDefaultLedStripConfig(ledConfig_t *ledConfig);
 void applyDefaultColors(hsvColor_t *colors);
 void applyDefaultModeColors(modeColorIndexes_t *modeColors);
 void applyDefaultSpecialColors(specialColorIndexes_t *specialColors);
+
+void setLedStripProfile(uint8_t ledStripProfileIndex);

@@ -64,7 +64,6 @@ extern "C" {
 
     PG_REGISTER(osdConfig_t, osdConfig, PG_OSD_CONFIG, 0);
     PG_REGISTER(batteryConfig_t, batteryConfig, PG_BATTERY_CONFIG, 0);
-//    PG_REGISTER(ledStripConfig_t, ledStripConfig, PG_LED_STRIP_CONFIG, 0);
     PG_REGISTER(systemConfig_t, systemConfig, PG_SYSTEM_CONFIG, 0);
     PG_REGISTER(pilotConfig_t, pilotConfig, PG_PILOT_CONFIG, 0);
     PG_REGISTER_ARRAY(adjustmentRange_t, MAX_ADJUSTMENT_RANGE_COUNT, adjustmentRanges, PG_ADJUSTMENT_RANGE_CONFIG, 0);
@@ -79,9 +78,7 @@ extern "C" {
     PG_REGISTER_ARRAY(rxChannelRangeConfig_t, NON_AUX_CHANNEL_COUNT, rxChannelRangeConfigs, PG_RX_CHANNEL_RANGE_CONFIG, 0);
     PG_REGISTER_ARRAY(rxFailsafeChannelConfig_t, MAX_SUPPORTED_RC_CHANNEL_COUNT, rxFailsafeChannelConfigs, PG_RX_FAILSAFE_CHANNEL_CONFIG, 0);
     PG_REGISTER(pidConfig_t, pidConfig, PG_PID_CONFIG, 0);
-
 	PG_REGISTER_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles, PG_LED_STRIP_PROFILES, 0);
-	//PG_DECLARE_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles);
 
     PG_REGISTER_WITH_RESET_FN(int8_t, unitTestData, PG_RESERVED_FOR_TESTING_1, 0);
 }
@@ -267,6 +264,6 @@ bool serialIsPortAvailable(serialPortIdentifier_e) { return false; }
 void generateLedConfig(ledConfig_t *, char *, size_t) {}
 bool isSerialTransmitBufferEmpty(const serialPort_t *) {return true; }
 void serialWrite(serialPort_t *, uint8_t ch) { printf("%c", ch);}
-
+void setLedStripProfile(uint8_t) {}
 
 }
