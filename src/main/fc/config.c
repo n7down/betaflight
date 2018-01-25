@@ -81,7 +81,7 @@ PG_RESET_TEMPLATE(systemConfig_t, systemConfig,
 	.cpu_overclock = false,
 	.powerOnArmingGraceTime = 5,
 	.boardIdentifier = TARGET_BOARD_IDENTIFIER,
-	.activeLedProfile = 0
+	.activeLedStripProfile = 0
 );
 
 #ifdef SWAP_SERIAL_PORT_0_AND_1_DEFAULTS

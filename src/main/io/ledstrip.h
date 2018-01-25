@@ -150,7 +150,6 @@ typedef struct ledStripConfig_s {
     ioTag_t ioTag;
 } ledStripConfig_t;
 
-// PG_DECLARE(ledStripConfig_t, ledStripConfig);
 PG_DECLARE_ARRAY(ledStripConfig_t, LED_STRIP_PROFILE_COUNT, ledStripProfiles);
 
 extern ledStripConfig_t *currentLedStripProfile;

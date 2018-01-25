@@ -38,7 +38,7 @@ typedef struct systemConfig_s {
     uint8_t cpu_overclock;
     uint8_t powerOnArmingGraceTime; // in seconds
     char boardIdentifier[sizeof(TARGET_BOARD_IDENTIFIER) + 1];
-	uint8_t activeLedProfile;
+	uint8_t activeLedStripProfile;
 } systemConfig_t;
 
 PG_DECLARE(systemConfig_t, systemConfig);
