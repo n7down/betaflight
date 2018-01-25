@@ -211,10 +211,7 @@ void pgResetFn_ledStripProfiles(ledStripConfig_t *ledStripConfig)
 	// }
 
 	for(int i = 0; i < LED_STRIP_PROFILE_COUNT; i++) {
-		setLedStripProfile(i);
-		ledStripConfig_t *ledStripConfigToReset = ledStripProfilesMutable(systemConfig()->activeLedProfile);
-
-		// TODO: reset each of the profiles
+		ledStripConfig_t *ledStripConfigToReset = &ledStripConfig[i]; 
 		memset(ledStripConfigToReset->ledConfigs, 0, LED_MAX_STRIP_LENGTH * sizeof(ledConfig_t));
     	// copy hsv colors as default
    		memset(ledStripConfigToReset->colors, 0, ARRAYLEN(hsv) * sizeof(hsvColor_t));
