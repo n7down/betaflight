@@ -46,6 +46,45 @@
 static bool featureRead = false;
 static uint8_t cmsx_FeatureLedstrip;
 static uint8_t ledColor;
+static uint8_t ledProfile;
+
+static void getLedColor(void)
+{
+	for (int ledIndex = 0; ledIndex < LED_MAX_STRIP_LENGTH; ledIndex++) {
+		const ledConfig_t *ledConfig = &ledStripProfiles(systemConfig()->activeLedStripProfile)->ledConfigs[ledIndex];
+
+		int fn = ledGetFunction(ledConfig);
+
+		if (fn == LED_FUNCTION_COLOR) {
+			ledColor = ledGetColor(ledConfig);
+			break;
+		}
+	}
+}
+
+static long applyLedColor(displayPort_t *pDisp, const void *self)
+{
+	UNUSED(pDisp);
+	UNUSED(self);
+
+	for (int ledIndex = 0; ledIndex < LED_MAX_STRIP_LENGTH; ledIndex++) {
+		ledConfig_t *ledConfig = &ledStripProfilesMutable(systemConfig()->activeLedStripProfile)->ledConfigs[ledIndex];
+		if (ledGetFunction(ledConfig) == LED_FUNCTION_COLOR) {
+			*ledConfig = DEFINE_LED(ledGetX(ledConfig), ledGetY(ledConfig), ledColor, ledGetDirection(ledConfig), ledGetFunction(ledConfig), ledGetOverlay(ledConfig), 0);
+		}
+	}
+	ledStripUpdate(micros());
+	return 0;
+}
+
+static long applyLedProfile(displayPort_t *pDisp, const void *self)
+{
+	UNUSED(pDisp);
+	UNUSED(self);
+
+	setLedStripProfile(ledProfile);
+	return 0;
+}
 
 static long cmsx_Ledstrip_FeatureRead(void)
 {
@@ -53,6 +92,8 @@ static long cmsx_Ledstrip_FeatureRead(void)
 		cmsx_FeatureLedstrip = feature(FEATURE_LED_STRIP) ? 1 : 0;
 		featureRead = true;
 	}
+
+	getLedColor();
 
 	return 0;
 }
@@ -70,20 +111,12 @@ static long cmsx_Ledstrip_FeatureWriteback(const OSD_Entry *self)
 	return 0;
 }
 
-static long applyLedColor(displayPort_t *pDisp, const void *self)
-{
-    UNUSED(pDisp);
-	UNUSED(self);
+static const char * const LED_PROFILE_NAMES[] = {
+	"0       ",
+	"1       "
+};
 
-	for (int ledIndex = 0; ledIndex < LED_MAX_STRIP_LENGTH; ledIndex++) {
-		ledConfig_t *ledConfig = &ledStripProfilesMutable(systemConfig()->activeLedStripProfile)->ledConfigs[ledIndex];
-        if (ledGetFunction(ledConfig) == LED_FUNCTION_COLOR) {
-			*ledConfig = DEFINE_LED(ledGetX(ledConfig), ledGetY(ledConfig), ledColor, ledGetDirection(ledConfig), ledGetFunction(ledConfig), ledGetOverlay(ledConfig), 0);
-		}
-	}
-    ledStripUpdate(micros());
-    return 0;
-}
+static OSD_TAB_t entryLedProfile = { &ledProfile, 1, LED_PROFILE_NAMES };
 
 static const char * const LED_COLOR_NAMES[] = {
 	"BLACK   ",
@@ -109,7 +142,7 @@ static OSD_Entry cmsx_menuLedstripEntries[] =
 {
 	{ "-- LED STRIP --", OME_Label, NULL, NULL, 0 },
 	{ "ENABLED", OME_Bool, NULL, &cmsx_FeatureLedstrip, 0 },
-	// { "PROFILE", OME_TAB, applyLedProfile, &entryLedProfile, 0 },
+	{ "PROFILE", OME_TAB, applyLedProfile, &entryLedProfile, 0 },
 	{ "Color  ", OME_TAB, applyLedColor, &entryLedColor, 0 },
 	{ "BACK", OME_Back, NULL, NULL, 0 },
 	{ NULL, OME_END, NULL, NULL, 0 }
