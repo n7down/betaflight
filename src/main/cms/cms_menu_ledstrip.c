@@ -69,7 +69,9 @@ static OSD_Entry cmsx_menuLedstripEntries[] =
 {
     { "-- LED STRIP --", OME_Label, NULL, NULL, 0 },
     { "ENABLED",         OME_Bool,  NULL, &cmsx_FeatureLedstrip, 0 },
-
+	// TODO: set profile
+	
+	// TODO: change led colors
     { "BACK", OME_Back, NULL, NULL, 0 },
     { NULL, OME_END, NULL, NULL, 0 }
 };
