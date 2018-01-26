@@ -1277,6 +1277,7 @@ static void cliLedProfile(char *cmdline)
 {
 	uint8_t i;
 	const char *ptr;
+
 	if(isEmpty(cmdline))
 	{
 		int activeLedStripProfile = systemConfig()->activeLedStripProfile;
@@ -3575,9 +3576,10 @@ static void printConfig(char *cmdline, bool doDiff)
 
 #ifdef USE_LED_STRIP
         cliPrintHashLine("led");
-		// TODO: fix this
-		//const ledStripConfig_t *activeLedStripProfile = ledStripProfiles(systemConfig()->activeLedStripProfile);
+		// TODO: fix this - print all led profiles
+		//const ledStripConfig_t *profile = ledStripProfiles(systemConfig()->activeLedStripProfile);
         //printLed(dumpMask, ledStripConfig_Copy.ledConfigs, activeLedStripProfile->ledConfigs);
+		//printLed(dumpMask, ledStripProfiles_CopyArray->ledConfigs, profile->ledConfigs);
 
         cliPrintHashLine("color");
 		// TODO: fix this
