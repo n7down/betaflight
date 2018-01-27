@@ -249,11 +249,6 @@ TEST(LedStripTest, smallestGrid)
     EXPECT_EQ(1, lowestYValueForSouth);
 }
 
-TEST(LedStripTest, LedStripProfiles)
-{
-	// TODO: test the profiles
-}
-
 hsvColor_t testColors[LED_CONFIGURABLE_COLOR_COUNT];
 
 extern hsvColor_t *colors;
@@ -293,7 +288,6 @@ TEST(ColorTest, parseColor)
     }
 
     // then
-
     for (uint8_t index = 0; index < TEST_COLOR_COUNT; index++) {
 #ifdef DEBUG_LEDSTRIP
         printf("iteration: %d\n", index);
@@ -303,6 +297,103 @@ TEST(ColorTest, parseColor)
         EXPECT_EQ(expectedColors[index].s, currentLedStripProfile->colors[index].s);
         EXPECT_EQ(expectedColors[index].v, currentLedStripProfile->colors[index].v);
     }
+}
+
+TEST(LedStripTest, LedStripProfiles)
+{
+	// TODO: test the profiles
+	setLedStripProfile(0);
+
+	ledStripConfig_t *currentLedStripProfile = ledStripProfilesMutable(systemConfig()->activeLedStripProfile);
+
+    // given
+    memset(currentLedStripProfile->colors, 0, sizeof(hsvColor_t) * LED_CONFIGURABLE_COLOR_COUNT);
+
+    // and
+    const hsvColor_t profile0ExpectedColors[TEST_COLOR_COUNT] = {
+            //  H    S    V
+            {   0,   0,   0 },
+            {   1,   1,   1 },
+            {   1,   1,   1 },
+            { 1,  1,   1 }
+    };
+
+    const char *profile0TestColors[TEST_COLOR_COUNT] = {
+            "0,0,0",
+            "1,1,1",
+            "1,1,1",
+            "1,1,1"
+    };
+
+    // when
+    for (uint8_t index = 0; index < TEST_COLOR_COUNT; index++) {
+#ifdef DEBUG_LEDSTRIP
+        printf("parse iteration: %d\n", index);
+#endif
+
+        parseColor(index, profile0TestColors[index]);
+    }
+
+	setLedStripProfile(1);
+
+	currentLedStripProfile = ledStripProfilesMutable(systemConfig()->activeLedStripProfile);
+
+    // given
+    memset(currentLedStripProfile->colors, 0, sizeof(hsvColor_t) * LED_CONFIGURABLE_COLOR_COUNT);
+
+    // and
+    const hsvColor_t profile1ExpectedColors[TEST_COLOR_COUNT] = {
+            //  H    S    V
+            {   1,   1,   1 },
+            {   0,   0,   0 },
+            { 0, 0, 0 },
+            { 0,  0,   0 }
+    };
+
+    const char *profile1TestColors[TEST_COLOR_COUNT] = {
+            "1,1,1",
+            "0,0,0",
+            "0,0,0",
+            "0,0,0"
+    };
+
+    // when
+    for (uint8_t index = 0; index < TEST_COLOR_COUNT; index++) {
+#ifdef DEBUG_LEDSTRIP
+        printf("parse iteration: %d\n", index);
+#endif
+
+        parseColor(index, profile1TestColors[index]);
+    }
+
+	setLedStripProfile(0);
+	currentLedStripProfile = ledStripProfilesMutable(systemConfig()->activeLedStripProfile);
+
+    // then
+    for (uint8_t index = 0; index < TEST_COLOR_COUNT; index++) {
+#ifdef DEBUG_LEDSTRIP
+        printf("iteration: %d\n", index);
+#endif
+
+        EXPECT_EQ(profile0ExpectedColors[index].h, currentLedStripProfile->colors[index].h);
+        EXPECT_EQ(profile0ExpectedColors[index].s, currentLedStripProfile->colors[index].s);
+        EXPECT_EQ(profile0ExpectedColors[index].v, currentLedStripProfile->colors[index].v);
+    }
+
+	setLedStripProfile(1);
+	currentLedStripProfile = ledStripProfilesMutable(systemConfig()->activeLedStripProfile);
+
+    // then
+    for (uint8_t index = 0; index < TEST_COLOR_COUNT; index++) {
+#ifdef DEBUG_LEDSTRIP
+        printf("iteration: %d\n", index);
+#endif
+
+        EXPECT_EQ(profile1ExpectedColors[index].h, currentLedStripProfile->colors[index].h);
+        EXPECT_EQ(profile1ExpectedColors[index].s, currentLedStripProfile->colors[index].s);
+        EXPECT_EQ(profile1ExpectedColors[index].v, currentLedStripProfile->colors[index].v);
+    }
+
 }
 
 extern "C" {
