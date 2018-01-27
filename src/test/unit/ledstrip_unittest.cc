@@ -301,7 +301,6 @@ TEST(ColorTest, parseColor)
 
 TEST(LedStripTest, LedStripProfiles)
 {
-	// TODO: test the profiles
 	setLedStripProfile(0);
 
 	ledStripConfig_t *currentLedStripProfile = ledStripProfilesMutable(systemConfig()->activeLedStripProfile);
@@ -313,16 +312,16 @@ TEST(LedStripTest, LedStripProfiles)
     const hsvColor_t profile0ExpectedColors[TEST_COLOR_COUNT] = {
             //  H    S    V
             {   0,   0,   0 },
-            {   1,   1,   1 },
-            {   1,   1,   1 },
-            { 1,  1,   1 }
+            {   0,   0,   0 },
+            {   0,   0,   0 },
+            { 	0,   0,   0 }
     };
 
     const char *profile0TestColors[TEST_COLOR_COUNT] = {
             "0,0,0",
-            "1,1,1",
-            "1,1,1",
-            "1,1,1"
+            "0,0,0",
+            "0,0,0",
+            "0,0,0"
     };
 
     // when
@@ -345,16 +344,16 @@ TEST(LedStripTest, LedStripProfiles)
     const hsvColor_t profile1ExpectedColors[TEST_COLOR_COUNT] = {
             //  H    S    V
             {   1,   1,   1 },
-            {   0,   0,   0 },
-            { 0, 0, 0 },
-            { 0,  0,   0 }
+            {   1,   1,   1 },
+            { 	1, 	 1,   1 },
+            { 	1,   1,   1 }
     };
 
     const char *profile1TestColors[TEST_COLOR_COUNT] = {
             "1,1,1",
-            "0,0,0",
-            "0,0,0",
-            "0,0,0"
+            "1,1,1",
+            "1,1,1",
+            "1,1,1"
     };
 
     // when
