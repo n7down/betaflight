@@ -1278,12 +1278,8 @@ static void cliLedProfile(char *cmdline)
 	uint8_t i;
 	const char *ptr;
 
-	if(isEmpty(cmdline))
-	{
-		int activeLedStripProfile = systemConfig()->activeLedStripProfile;
-		char profile[1];
-		itoa(activeLedStripProfile, profile, 1);
-		cliPrintLine(profile);
+	if(isEmpty(cmdline)) {
+		cliPrintLinef("profile %d", systemConfig()->activeLedStripProfile);
 	} else {
 		ptr = cmdline;
 		i = atoi(ptr);
