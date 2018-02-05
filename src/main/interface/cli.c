@@ -1281,12 +1281,10 @@ static void cliLedProfile(char *cmdline)
 	if(isEmpty(cmdline)) {
 		cliPrintLinef("profile %d", systemConfig()->activeLedStripProfile);
 	} else {
-		ptr = cmdline;
-		i = atoi(ptr);
+		const int i = atoi(cmdline);
 		if(i < LED_STRIP_PROFILE_COUNT) {
-			setLedStripProfile(i);
-		} else {
-			cliShowArgumentRangeError("index", 0, LED_STRIP_PROFILE_COUNT - 1);
+			systemConfigMutable()->activeLedProfile = i;
+			cliProfile("");
 		}
 	}
 }
