@@ -1275,18 +1275,29 @@ static void printLed(uint8_t dumpMask, const ledConfig_t *ledConfigs, const ledC
 
 static void cliLedProfile(char *cmdline)
 {
-	uint8_t i;
-	const char *ptr;
-
 	if(isEmpty(cmdline)) {
 		cliPrintLinef("profile %d", systemConfig()->activeLedStripProfile);
 	} else {
 		const int i = atoi(cmdline);
 		if(i < LED_STRIP_PROFILE_COUNT) {
-			systemConfigMutable()->activeLedProfile = i;
-			cliProfile("");
+			systemConfigMutable()->activeLedStripProfile = i;
+			cliLedProfile("");
 		}
 	}
+}
+
+static void cliDumpLedStripProfile(uint8_t ledStripProfileIndex, uint8_t dumpMask)
+{
+    if (ledStripProfileIndex >= CONTROL_RATE_PROFILE_COUNT) {
+        // Faulty values
+        return;
+    }
+   	systemConfigMutable()->activeLedStripProfile = ledStripProfileIndex; 
+    cliPrintHashLine("ledstripprofile");
+    cliLedProfile("");
+	cliPrintLinefeed();
+    // TODO: update this
+	dumpAllValues(PROFILE_RATE_VALUE, dumpMask);
 }
 
 static void cliLed(char *cmdline)
