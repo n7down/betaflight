@@ -3580,17 +3580,17 @@ static void printConfig(char *cmdline, bool doDiff)
         printSerial(dumpMask, &serialConfig_Copy, serialConfig());
 
 #ifdef USE_LED_STRIP
-        cliPrintHashLine("led");
+        // cliPrintHashLine("led");
 		// TODO: fix this - print all led profiles
 		//const ledStripConfig_t *profile = ledStripProfiles(systemConfig()->activeLedStripProfile);
         //printLed(dumpMask, ledStripConfig_Copy.ledConfigs, activeLedStripProfile->ledConfigs);
 		//printLed(dumpMask, ledStripProfiles_CopyArray->ledConfigs, profile->ledConfigs);
 
-        cliPrintHashLine("color");
+        // cliPrintHashLine("color");
 		// TODO: fix this
         //printColor(dumpMask, ledStripConfig_Copy.colors, activeLedStripProfile->colors);
 
-        cliPrintHashLine("mode_color");
+        // cliPrintHashLine("mode_color");
 		// TODO: fix this
         //printModeColor(dumpMask, &ledStripConfig_Copy, activeLedStripProfile);
 #endif
@@ -3632,12 +3632,26 @@ static void printConfig(char *cmdline, bool doDiff)
             cliPrintHashLine("restore original rateprofile selection");
             cliRateProfile("");
 
+#ifndef USE_LED_STRIP
+			const uint8_t ledStripProfileSave = systemConfig_Copy.activeLedStripProfile;
+			for(uint32_t ledProfileIndex = 0; ledProfileIndex < LED_STRIP_PROFILE_COUNT; ledProfileIndex++) {
+				cliDumpLedStripProfile(ledProfileIndex, dumpMask);
+			}
+			systemConfigMutable->activeRateProfile = ledStripProfileSave;
+			cliPrintHasLine("restore original led profile selection");
+			cliLedProfile("");
+#endif
+
             cliPrintHashLine("save configuration");
             cliPrint("save");
         } else {
             cliDumpPidProfile(systemConfig_Copy.pidProfileIndex, dumpMask);
 
             cliDumpRateProfile(systemConfig_Copy.activeRateProfile, dumpMask);
+
+#ifndef USE_LED_STRIP
+			cliDumpLedStripProfile(systemConfig_Copy.activeLedStripProfile, dumpMask);
+#endif		
         }
     }
 
@@ -3648,6 +3662,8 @@ static void printConfig(char *cmdline, bool doDiff)
     if (dumpMask & DUMP_RATES) {
         cliDumpRateProfile(systemConfig_Copy.activeRateProfile, dumpMask);
     }
+
+	// TODO: add led strip?
     // restore configs from copies
     restoreConfigs();
 }
