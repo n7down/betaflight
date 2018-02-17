@@ -3632,15 +3632,15 @@ static void printConfig(char *cmdline, bool doDiff)
             cliPrintHashLine("restore original rateprofile selection");
             cliRateProfile("");
 
-#ifndef USE_LED_STRIP
+//#ifndef USE_LED_STRIP
 			const uint8_t ledStripProfileSave = systemConfig_Copy.activeLedStripProfile;
 			for(uint32_t ledProfileIndex = 0; ledProfileIndex < LED_STRIP_PROFILE_COUNT; ledProfileIndex++) {
 				cliDumpLedStripProfile(ledProfileIndex, dumpMask);
 			}
-			systemConfigMutable->activeRateProfile = ledStripProfileSave;
-			cliPrintHasLine("restore original led profile selection");
+			systemConfigMutable()->activeRateProfile = ledStripProfileSave;
+			cliPrintHashLine("restore original led profile selection");
 			cliLedProfile("");
-#endif
+//#endif
 
             cliPrintHashLine("save configuration");
             cliPrint("save");
